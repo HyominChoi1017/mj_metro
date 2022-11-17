@@ -1,117 +1,106 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import { StatusBar } from 'expo-status-bar';
+import { Button, StyleSheet, Text, Vibration, View } from 'react-native';
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-/* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
- * LTI update could not be added via codemod */
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+export default function App() {
+  
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View className="App" style = {main.container}>
+      <Text style = {main.appTitle}>MJMetro</Text>
+      <View style = {main.map}></View>
+
+      <View style = {[main.stationBar, {flexDirection: 'row'}]}>
+        <View style = {[main.stationBeAf, {
+          borderTopRightRadius: 10,
+          borderBottomRightRadius: 10,
+        }]}></View>
+        <View style = {[main.station, {
+          borderRadius: 10,
+          margin: 30,
+        }]}><Text style = {main.station}>asdf</Text></View>
+        <View style = {[main.stationBeAf, {
+          borderTopLeftRadius: 10,
+          borderBottomLeftRadius: 10,
+        }]}></View>
+      </View>
+
+      <View style = {main.statusSpace}></View>
+
+      <View style = {{flexDirection: 'row'}}>
+        <Button style = {main.button} title = '1'></Button>
+        <Button style = {main.button} title = '2'></Button>
+        <Button style = {main.button} title = '3'></Button>
+        <Button style = {main.button} title = '4'></Button>
+      </View>
+      <StatusBar style = "auto"></StatusBar>
     </View>
   );
-};
+}
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+const main = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'rgb(243, 243, 243)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  sectionTitle: {
+  appTitle: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 50,
     fontSize: 24,
-    fontWeight: '600',
+    border: 10,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  map: {
+    flex: 1,
+    backgroundColor: 'white',
+    borderColor: 'rgb(152, 152, 152)',
+    borderWidth: 2,
+    paddingBottom: 300,
+    paddingLeft: 200,
+    paddingRight: 200,
+    marginBottom: 0,
   },
-  highlight: {
-    fontWeight: '700',
+  stationBar: {
+    flex: 1,
+    borderColor: 'rgb(152, 152, 152)',
+    borderBottomWidth: 2,
+    paddingBottom: 35,
+    marginTop: 0,
+    justifyContent: 'space-around',
   },
-});
+  station: {
+    flex: 1,   
+    backgroundColor: 'rgb(152, 152, 152)',
+    padding: 25,
+    marginTop: 10,
+    marginBottom: 10,
+    alignItems: 'flex-start',
 
-export default App;
+    textAlign: 'center'
+  },
+  stationBeAf: {
+    flex: 1,
+    
+    backgroundColor: 'rgb(152, 152, 152)',
+    marginTop: 15,  
+    padding: 20,
+    alignItems: 'flex-start',
+  },
+  statusSpace: {
+    flex: 1,
+    padding: 100,
+    paddingLeft: 200,
+    paddingRight: 200,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgb(152, 152, 152)',
+  },
+  button: {
+    flex: 1,
+    borderRadius: 10,
+    backgroundColor: 'rgb(152, 152, 152)',
+    padding: 25,
+    margin: 10,
+    marginBottom: 30,
+  }
+});
