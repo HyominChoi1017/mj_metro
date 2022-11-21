@@ -1,27 +1,62 @@
 from django.core.exceptions import *
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import *
 from .serializers import *
+from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
-from realtimeWeather import getWeatherData
+from .realtimeWeather import *
 
 # Test View
+
 class UserDataAPI(APIView):
+    # 전체 유저 데이터 획득
+    @csrf_exempt
     def get(self, request):
         queryset = User.objects.all()
         print(queryset)
         serializer = UserSerializer(queryset, many=True)
         return Response(serializer.data)
 
+    # 회원가입
+    @csrf_exempt
+    def post(self, request):
+        queryset = JSONParser().parse(request)
+        serializer = UserSerializer(data=queryset)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201) #JsonResponse로 하는 방법도 존재
+        return Response(serializer.errors, status=400) #JsonResponse로 하는 방법도 존재
+        
+@csrf_exempt
 class SingleUserDataAPI(APIView):
+    #단일 유저데이터 조회
     def get(self, request, userid):
         queryset = User.objects.all().filter(user__exact=userid)
         print(queryset)
         serializer = UserSerializer(queryset, many=False)
         return Response(serializer.data)
+
+    #단일 유저데이터 수정
+    def put(self, request, userid):
+        queryset = User.objects.all().filter(user__exact=userid)
+        data = JSONParser().parse(request)
+        print(queryset)
+        serializer = UserSerializer(queryset, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.data, status=400)
+
+    #단일 유저데이터 삭제
+    def delete(self, request, userid):
+        obj = User.objects.all().filter(user_exact=userid)
+        obj.delete()
+        return Response(status=204)
 
 
 class ScheduleDataAPI(APIView):
@@ -67,8 +102,17 @@ def getWeatherDataView(lat, lon):
 
 
 
-def create_schedule(request, user_id):
-    pass
+@csrf_exempt
+@api_view()
+def UserLogin(request):
+    if request.method == 'POST':
+        loginData = JSONParser().parse(request)
+        search_username = loginData['Username']
+        search_password = loginData['Password']
+        objusrname = User.objects.get(Username=search_username)
+        objpw = User.objects.get(Password=search_password)
 
-def delete_schedule(request, user_id, schedule_id):
-    pass
+        if loginData['Username'] == objusrname.Username and loginData['Password'] == objpw.Password:
+            return Response(status=200)
+        else:
+            return Response(status=400)
