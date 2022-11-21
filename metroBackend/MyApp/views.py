@@ -16,6 +16,14 @@ class UserDataAPI(APIView):
         serializer = UserSerializer(queryset, many=True)
         return Response(serializer.data)
 
+class SingleUserDataAPI(APIView):
+    def get(self, request, userid):
+        queryset = User.objects.all().filter(user__exact=userid)
+        print(queryset)
+        serializer = UserSerializer(queryset, many=False)
+        return Response(serializer.data)
+
+
 class ScheduleDataAPI(APIView):
     def get(self, request):
         queryset = Schedule.objects.all()
@@ -52,6 +60,9 @@ class UserRouteAPI(APIView):
         print(queryset.values)
         serializer = UserRouteAPI(queryset, many=True)
         return Response(serializer.data)
+
+
+
 
 
 def create_schedule(request, user_id):
