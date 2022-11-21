@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from .models import *
 from .serializers import *
 from rest_framework.views import APIView
-
+from realtimeWeather import getWeatherData
 
 # Test View
 class UserDataAPI(APIView):
@@ -61,7 +61,9 @@ class UserRouteAPI(APIView):
         serializer = UserRouteAPI(queryset, many=True)
         return Response(serializer.data)
 
-
+def getWeatherDataView(lat, lon):
+    res = getWeatherData(lat, lon)
+    return Response(res)
 
 
 
