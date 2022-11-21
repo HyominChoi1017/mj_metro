@@ -23,4 +23,4 @@ def getWeatherData(lat, lon):
 
 
 # for test...
-# getWeatherData(37.22349686935068, 127.18721018723127)
+getWeatherData(37.22349686935068, 127.18721018723127)
