@@ -26,9 +26,9 @@ class Schedule(models.Model):
     time = models.CharField(default="00:00:00", max_length=10) # 몇시에 있는 일정인지.
     count = models.SmallIntegerField(default=30) # 기본값으로 열차 출발 30분 전에 알림을 줌
 
-    
+
     def __str__(self):
-        return self.scheduleName 
+        return str(self.user)
 
  
 class FavStation(models.Model):
@@ -56,30 +56,28 @@ class FavRoute(models.Model):
     })
     def __str__(self):
         return str(self.favRouteId)
-
-class Report(models.Model):
-    totalReport = models.IntegerField(default=0)
-    # 날마다 0으로 초기화
-     
+ 
 
 # 역 정보들만 나오면 됨.
 class Station(models.Model):
     lineNumber = models.CharField(max_length=1, default="1")
     stationName = models.CharField(max_length=10, default="")
-    stationNum = models.CharField(max_length=3, default="000", primary_key=True)
+    stationNum = models.CharField(max_length=3, default="000")
     latitude = models.FloatField()
     longitude = models.FloatField()
 
     timeTable = models.JSONField(default={
         "departureTime": [],
         "arrivalTime": []
-    })
-    reported = models.IntegerField(default=0)
+    }) 
 
     def getWeather():
         pass
     def getPopulation():
         pass
+
+    def __str__(self):
+        return self.stationName
 
 
 class User(models.Model):

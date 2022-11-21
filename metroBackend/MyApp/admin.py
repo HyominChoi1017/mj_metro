@@ -10,5 +10,4 @@ admin.site.register(FavRoute)
  
  
 admin.site.register(Station)
-
-admin.site.register(Report)
+ 

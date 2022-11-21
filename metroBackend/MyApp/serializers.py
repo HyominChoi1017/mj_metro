@@ -24,14 +24,24 @@ class FavRouteSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavRoute
         fields = '__all__'
- 
-class ReportSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Report
-        fields = '__all__'
-
+  
 
 class StationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Station
+        fields = '__all__'
+
+class UserScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schedule
+        fields = '__all__'
+
+class UserStationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schedule
+        fields = '__all__'
+
+class UserRouteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schedule
         fields = '__all__'
