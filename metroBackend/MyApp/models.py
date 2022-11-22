@@ -65,6 +65,8 @@ class Station(models.Model):
     stationNum = models.CharField(max_length=3, default="000")
     latitude = models.FloatField()
     longitude = models.FloatField()
+    transfer = models.CharField(max_length=1, default="0")
+    address = models.CharField(max_length=100, default="")
 
     timeTable = models.JSONField(default={
         "departureTime": [],
