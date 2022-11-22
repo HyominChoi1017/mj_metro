@@ -11,8 +11,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from .realtimeWeather import *
 
-# Test View
-
+# Test View 
 class UserDataAPI(APIView):
     # 전체 유저 데이터 획득
     @csrf_exempt
@@ -22,7 +21,7 @@ class UserDataAPI(APIView):
         serializer = UserSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    # 회원가입
+    # 회원가입 
     @csrf_exempt
     def post(self, request):
         queryset = JSONParser().parse(request)
@@ -31,10 +30,11 @@ class UserDataAPI(APIView):
             serializer.save()
             return Response(serializer.data, status=201) #JsonResponse로 하는 방법도 존재
         return Response(serializer.errors, status=400) #JsonResponse로 하는 방법도 존재
-        
-@csrf_exempt
+
+
 class SingleUserDataAPI(APIView):
     #단일 유저데이터 조회
+    @csrf_exempt
     def get(self, request, userid):
         queryset = User.objects.all().filter(user__exact=userid)
         print(queryset)
@@ -42,6 +42,7 @@ class SingleUserDataAPI(APIView):
         return Response(serializer.data)
 
     #단일 유저데이터 수정
+    @csrf_exempt
     def put(self, request, userid):
         queryset = User.objects.all().filter(user__exact=userid)
         data = JSONParser().parse(request)
@@ -60,42 +61,59 @@ class SingleUserDataAPI(APIView):
 
 
 class ScheduleDataAPI(APIView):
+    @csrf_exempt
     def get(self, request):
         queryset = Schedule.objects.all()
         print(queryset)
         serializer = ScheduleSerializer(queryset,many=True)
         return Response(serializer.data)
-# Actual View
+    
+    @csrf_exempt
+    def post(self, request):
+        queryset = JSONParser().parse(request)
+        serializer = ScheduleSerializer(data=queryset)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201) #JsonResponse로 하는 방법도 존재
+        return Response(serializer.errors, status=400) #JsonResponse로 하는 방법도 존재
+        
+
+# Actual View 
 class StationDataAPI(APIView):
+    @csrf_exempt
     def get(self, request):
         queryset = Station.objects.all()
         print(queryset)
         serializer = StationSerializer(queryset, many=True)
         return Response(serializer.data)
 
-# User의 Schedule을 관리한다.
+# User의 Schedule을 관리한다. 
 class UserScheduleAPI(APIView):
+    @csrf_exempt
     def get(self, request, userid):
         queryset = Schedule.objects.all().filter(user__exact=userid)
         print(queryset.values)
         serializer = UserScheduleSerializer(queryset, many=True)
         return Response(serializer.data)
 
-# User의 FavStation을 관리한다.
+# User의 FavStation을 관리한다. 
 class UserStationAPI(APIView):
+    @csrf_exempt
     def get(self, request, userid):
         queryset = FavStation.objects.all().filter(user__exact=userid)
         print(queryset.values)
         serializer = UserStationSerializer(queryset, many=True)
         return Response(serializer.data)
-
+ 
 class UserRouteAPI(APIView):
+    @csrf_exempt
     def get(self, request, userid):
         queryset = FavRoute.objects.all().filter(user__exact=userid)
         print(queryset.values)
         serializer = UserRouteAPI(queryset, many=True)
         return Response(serializer.data)
 
+@csrf_exempt
 def getWeatherDataView(lat, lon):
     res = getWeatherData(lat, lon)
     return Response(res)
