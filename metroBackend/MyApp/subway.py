@@ -333,9 +333,42 @@ def d(start, end, *args):
 
     for r in result.keys():
         result[r]['route'] = divide_route(result[r]['route'])
+        
+        
+        
+        i1 = ''
+        i2 = result[r]['route'][0][1]
+        transfer_count = 0
+        for i in result[r]['route'][1:]:
+            i1 = i2
+            i2 = i[1]
+            if i1 == i2:
+                continue
+            transfer_count += 1
+        result[r]['transfer_count'] = transfer_count
     return result
 
 # d('101','103','105')
-# pp(d('101','103','105'))
+# pp(d('101','105','107'))
 # pp(d('601','614')) # 109, 122 돈, 601 614 시간, 116 121
 # pp(d('109','122')) # 109, 122 돈, 601 614 시간, 116 121
+
+
+# {'distance': {'min_value': 3300,
+#               'route': [(['101', '102', '103', '104', '105', '106', '107'], '1'),
+#                         (['107', '106', '105'], '1')],
+#               'transfer_count': 0},
+#  'money': {'min_value': 2480,
+#            'route': [(['101', '102', '103', '104', '105', '106', '107'], '1'),
+#                      (['107', '106', '105'], '1')],
+#            'transfer_count': 0},
+#  'time': {'min_value': 3420,
+#           'route': [(['101', '102', '103', '104', '105', '106', '107'], '1'),
+#                     (['107', '106', '105'], '1')],
+#           'transfer_count': 0},
+#  'transfer': {'distance': 3300,
+#               'money': 2480,
+#               'route': [(['101', '102', '103', '104', '105', '106', '107'], '1'),
+#                         (['107', '106', '105'], '1')],
+#               'time': 3420,
+#               'transfer_count': 0}}
