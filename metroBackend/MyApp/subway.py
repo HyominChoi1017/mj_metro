@@ -4,7 +4,7 @@ from pprint import pprint as pp
 
 station = {}
 
-f1 = open(os.path.dirname(os.path.realpath(__file__))+'\dataset\stations_node.csv', 'r', encoding='utf-8-sig')
+f1 = open(os.path.dirname(os.path.realpath(__file__))+'/dataset/stations_node.csv', 'r', encoding='utf-8-sig')
 csv_read_node = csv.DictReader(f1)  
 for col in csv_read_node: 
     snum = col['역번호'] # print(type(col['역번호'])) str
@@ -12,7 +12,7 @@ for col in csv_read_node:
     station.update({snum:col})
     station[snum].update({'근처역':{}})
 f1.close()
-f2 = open(os.path.dirname(os.path.realpath(__file__))+'\dataset\stations.csv', 'r', encoding='utf-8-sig')
+f2 = open(os.path.dirname(os.path.realpath(__file__))+'/dataset/stations.csv', 'r', encoding='utf-8-sig')
 csv_read_node = csv.DictReader(f2)  
 for col in csv_read_node: 
     startsnum = col['출발역']
@@ -157,7 +157,7 @@ print(station_lineNumber_dict)
 #--------------------------지하철 시간표-------------------------------------
 import copy
 timeTable = []
-f3 = open(os.path.dirname(os.path.realpath(__file__))+'\dataset\station_timetable.csv', 'r', encoding='utf-8-sig')
+f3 = open(os.path.dirname(os.path.realpath(__file__))+'/dataset/station_timetable.csv', 'r', encoding='utf-8-sig')
 rdr = csv.reader(f3)
 for line in rdr:
     temp = []

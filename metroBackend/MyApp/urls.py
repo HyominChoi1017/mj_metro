@@ -18,8 +18,10 @@ urlpatterns = [
     path('api/User/<int:userid>/', SingleUserDataAPI().as_view()),
     path('api/Schedule/', ScheduleDataAPI.as_view()),
     path('api/Station/', StationDataAPI.as_view()),
+    path('api/Station/<str:snum>', SingleStationDataAPI.as_view()),
     path('api/Schedule/<int:userid>/', UserScheduleAPI.as_view()),
     path('api/Weather/<int:lati>/<int:long>/', getWeatherData),
     path('login/', UserLogin),
+    path('api/SubwayRoute/', returnRoute),
 
 ]
