@@ -1,106 +1,101 @@
-import { StatusBar } from 'expo-status-bar';
+import React, { useEffect, useReducer } from 'react';
 import { Button, StyleSheet, Text, Vibration, View } from 'react-native';
+
+import Home from './home';
+import FindingWay from './FindingWay';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+import axios from 'axios';
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   
   return (
-    <View className="App" style = {main.container}>
-      <Text style = {main.appTitle}>MJMetro</Text>
-      <View style = {main.map}></View>
-
-      <View style = {[main.stationBar, {flexDirection: 'row'}]}>
-        <View style = {[main.stationBeAf, {
-          borderTopRightRadius: 10,
-          borderBottomRightRadius: 10,
-        }]}></View>
-        <View style = {[main.station, {
-          borderRadius: 10,
-          margin: 30,
-        }]}><Text style = {main.station}>asdf</Text></View>
-        <View style = {[main.stationBeAf, {
-          borderTopLeftRadius: 10,
-          borderBottomLeftRadius: 10,
-        }]}></View>
-      </View>
-
-      <View style = {main.statusSpace}></View>
-
-      <View style = {{flexDirection: 'row'}}>
-        <Button style = {main.button} title = '1'></Button>
-        <Button style = {main.button} title = '2'></Button>
-        <Button style = {main.button} title = '3'></Button>
-        <Button style = {main.button} title = '4'></Button>
-      </View>
-      <StatusBar style = "auto"></StatusBar>
-    </View>
+      <NavigationContainer style = {main.container}>
+          <Tab.Navigator>
+            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="길 찾기" component={FindingWayScreen} />
+              <Tab.Screen name="지연 신고" component={ReportScreen}/>
+              <Tab.Screen name="설정" component={OptionsScreen}/>
+              <Tab.Screen name="My" component={MyPageScreen}/>
+          </Tab.Navigator>
+      </NavigationContainer>
   );
+}
+
+const HomeScreen = () => {
+  return(
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Home/>
+    </View>
+  )
+}
+
+const FindingWayScreen = () => {
+  return(
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <FindingWay />
+    </View>
+  )
+}
+
+const ReportScreen = () => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text key = {}>test3</Text>
+    </View>
+  )
+}
+
+const OptionsScreen = () => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>test4</Text>
+    </View>
+  )
+}
+
+const MyPageScreen = () => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>test5</Text>
+    </View>
+  )
 }
 
 const main = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: 'rgb(243, 243, 243)',
-    alignItems: 'center',
-    justifyContent: 'center',
+  flex: 1,
+  backgroundColor: 'rgb(243, 243, 243)',
+  alignItems: 'center',
+  justifyContent: 'center',
   },
-  appTitle: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 50,
-    fontSize: 24,
-    border: 10,
-  },
-  map: {
-    flex: 1,
-    backgroundColor: 'white',
-    borderColor: 'rgb(152, 152, 152)',
-    borderWidth: 2,
-    paddingBottom: 300,
-    paddingLeft: 200,
-    paddingRight: 200,
-    marginBottom: 0,
-  },
-  stationBar: {
-    flex: 1,
-    borderColor: 'rgb(152, 152, 152)',
-    borderBottomWidth: 2,
-    paddingBottom: 35,
-    marginTop: 0,
-    justifyContent: 'space-around',
-  },
-  station: {
-    flex: 1,   
-    backgroundColor: 'rgb(152, 152, 152)',
-    padding: 25,
-    marginTop: 10,
-    marginBottom: 10,
-    alignItems: 'flex-start',
+})
 
-    textAlign: 'center'
-  },
-  stationBeAf: {
-    flex: 1,
-    
-    backgroundColor: 'rgb(152, 152, 152)',
-    marginTop: 15,  
-    padding: 20,
-    alignItems: 'flex-start',
-  },
-  statusSpace: {
-    flex: 1,
-    padding: 100,
-    paddingLeft: 200,
-    paddingRight: 200,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgb(152, 152, 152)',
-  },
-  button: {
-    flex: 1,
-    borderRadius: 10,
-    backgroundColor: 'rgb(152, 152, 152)',
-    padding: 25,
-    margin: 10,
-    marginBottom: 30,
-  }
-});
+const [station, setStation] = useState('');
+const [loading, setLoading] = useState('');
+const [error, setError] = useState('');
+
+const fetch = async () => {
+  try {
+    setError(null);
+    setStation(null);
+
+    setLoading(true);
+
+    const response = await axios.get(
+      'http://127.0.0.1:8000/api/'
+    );
+
+    setStation(response.data.data);
+  } catch(e) {
+    setError(e);
+  };
+
+  useEffect(() => {
+    fetch();
+  }, []);
+}
