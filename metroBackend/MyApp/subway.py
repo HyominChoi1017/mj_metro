@@ -1,10 +1,10 @@
 #--------------------------데이터 불러오기와서 딕셔너리로 그래프그리기-------------------------------------
-import csv 
+import csv, re, os
 from pprint import pprint as pp
 
 station = {}
 
-f1 = open('./dataset/stations_node.csv', 'r', encoding='utf-8-sig')
+f1 = open(os.path.dirname(os.path.realpath(__file__))+'\dataset\stations_node.csv', 'r', encoding='utf-8-sig')
 csv_read_node = csv.DictReader(f1)  
 for col in csv_read_node: 
     snum = col['역번호'] # print(type(col['역번호'])) str
@@ -12,7 +12,7 @@ for col in csv_read_node:
     station.update({snum:col})
     station[snum].update({'근처역':{}})
 f1.close()
-f2 = open('./dataset/stations.csv', 'r', encoding='utf-8-sig')
+f2 = open(os.path.dirname(os.path.realpath(__file__))+'\dataset\stations.csv', 'r', encoding='utf-8-sig')
 csv_read_node = csv.DictReader(f2)  
 for col in csv_read_node: 
     startsnum = col['출발역']
@@ -48,6 +48,8 @@ class S:
         if args['환승(없다면0)']!='0':
             self.__lineNumber.append(args['환승(없다면0)'])
         self.__nearStation = args['근처역']
+        self.__s_timetable = {}
+        #시간표
 
     @property
     def s_num(self):
@@ -76,6 +78,14 @@ class S:
     @property
     def nearStation(self):
         return self.__nearStation
+
+    @property
+    def s_timetable(self):
+        return self.__s_timetable
+
+    @s_timetable.setter
+    def s_timetable(self, value):    # setter
+        self.__s_timetable = value
 
     def sprint(self):
         print(self.s_num)
@@ -135,16 +145,145 @@ for i in station_lineNumber_dict.keys():#i는 현재 호선
                 break
     station_lineNumber_dict[i] = result
 
-# pp(station_lineNumber_dict)
+print(station_lineNumber_dict)
+
 
 # 만약 1개짜리가 있다면 한개는 처음 한개는 마지막 두고
 # 새로 리스트로 class에 있는 값으로 확인 후 리스트 생성
 # 만약 모두 2개라면 그냥 한줄로 세운다.
 # 그러고 만든 리스트를 새로 생성
-
-
-
 #--------------------------데이터 저장 및 클래스 작업 + 호선 끝-------------------------------------
+
+#--------------------------지하철 시간표-------------------------------------
+import copy
+timeTable = []
+f3 = open(os.path.dirname(os.path.realpath(__file__))+'\dataset\station_timetable.csv', 'r', encoding='utf-8-sig')
+rdr = csv.reader(f3)
+for line in rdr:
+    temp = []
+    for i in line:
+        temp.append(re.sub(r'[^0-9]', '', i))
+    timeTable.append(temp)
+f3.close()
+
+station_timeTable_dict = {}
+# print(timeTable)
+
+for i in timeTable: # 호선 딕셔너리 시작점에 있는 역에 넣을 시간표를 만든다. 시간표는 호선:{'front':[시간(초)],'back':[시간(초)]} 호선은 1~9까지
+    station_timeTable_dict.update({i[0]:{}})
+    front = []
+    back = []
+    temp_count = 0
+    temp_time = 0
+    for j in range(1,len(i)):
+        if i[j]=='':
+            break
+        if j%2 == 1: # 시간
+            temp_time += int(i[j])*60*60 #초로 바꾸기
+        else: #분
+            for k in range(int(len(i[j]) / 2)):
+                if temp_count == 0:
+                    front.append(int(i[j][k*2:k*2+2])*60 + temp_time)
+                    temp_count = 1
+                else:
+                    back.append(int(i[j][k*2:k*2+2])*60 + temp_time)
+                    temp_count = 0
+
+    station_timeTable_dict[i[0]].update({'front':front})
+    station_timeTable_dict[i[0]].update({'back':back})
+    
+# print(station_timeTable_dict)
+
+# print(station_timeTable_dict['9'])
+# print(station_lineNumber_dict)
+for lineNum, linelist in station_lineNumber_dict.items():#직접 맨 처음 역에 넣기
+    station_class_dict[linelist[0]].s_timetable.update({lineNum:station_timeTable_dict[lineNum]})
+for lineNum, linelist in station_lineNumber_dict.items():
+    print(station_class_dict[linelist[0]].s_timetable.keys())
+
+# print(station_class_dict['107'].s_timetable['3'])
+
+# '1': ['101'], '2': ['101'], '3': ['107'], '4': ['104'], '5': ['109'], '6': ['116'], '7': ['202'], '8': ['113'], '9': ['112']
+for lineNum, linelist in station_lineNumber_dict.items(): # 다른 역들 계산해서 넣기 front = 숫자 높은거로 가는거 101 - 102 - 103
+    # front back 선택도 만들기 
+    isFront = True
+    temp_var1 = 0
+    temp_var2 = 0 
+    for i in linelist:
+        if int(i)//100 == int(lineNum):
+            if temp_var1 !=0 and temp_var2 != 0:
+                if int(temp_var1) < int(temp_var2):
+                    isFront = True
+                else:
+                    isFront = False
+            if temp_var1 == 0:
+                temp_var1 = i
+            elif temp_var2 == 0:
+                temp_var2 = i
+
+
+    temp_list = linelist[0]
+    for i in linelist[1:]:
+        temp_table = copy.deepcopy(station_class_dict[temp_list].s_timetable[lineNum])
+        temp_time_plus = int(station_class_dict[temp_list].nearStation[i]['시간(초)']) + 60
+        temp_count = 0
+        for k, v in temp_table.items():
+            if isFront:
+                if k=='front':
+                    for j in range(len(v)):
+                        v[j] += temp_time_plus
+                else:
+                    for j in range(len(v)):
+                        v[j] -= temp_time_plus
+            else:
+                if k=='front':
+                    for j in range(len(v)):
+                        v[j] -= temp_time_plus
+                else:
+                    for j in range(len(v)):
+                        v[j] += temp_time_plus
+        station_class_dict[i].s_timetable.update({lineNum:temp_table})
+        temp_list = i
+
+# start = '101'
+# end = '103'
+# h='1'
+# print(start+'front', station_class_dict[start].s_timetable[h]['front'][:5])
+# print(end+'front', station_class_dict[end].s_timetable[h]['front'][:5])
+# print(start+'back', station_class_dict[start].s_timetable[h]['back'][:5])
+# print(end+'back', station_class_dict[end].s_timetable[h]['back'][:5])
+# print('ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ')
+# start = '107'
+# end = '308'
+# h='3'
+# print(start+'front', station_class_dict[start].s_timetable[h]['front'][:5])
+# print(end+'front', station_class_dict[end].s_timetable[h]['front'][:5])
+# print(start+'back', station_class_dict[start].s_timetable[h]['back'][:5])
+# print(end+'back', station_class_dict[end].s_timetable[h]['back'][:5])
+
+# print('ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ')
+# start = '101'
+# end = '103'
+# h='1'
+# print(start+'front', station_class_dict[start].s_timetable[h]['front'][:5])
+# print(end+'front', station_class_dict[end].s_timetable[h]['front'][:5])
+# print(start+'back', station_class_dict[start].s_timetable[h]['back'][:5])
+# print(end+'back', station_class_dict[end].s_timetable[h]['back'][:5])
+# print('ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ')
+# print(station_class_dict['103'].s_timetable['1'])
+
+# back 빼는거 만들기
+# 순환 억까 청산하기
+
+
+# {'이쪽인가':{'door_open':[],'door_close':[]},
+# '저쪽인가':{'door_open':[],'door_close':[]}}
+
+
+
+
+
+#--------------------------지하철 시간표 끝-------------------------------------
 
 #--------------------------다익스트라-------------------------------------
 
@@ -352,8 +491,6 @@ def d(start, end, *args):
 # pp(d('101','105','107'))
 # pp(d('601','614')) # 109, 122 돈, 601 614 시간, 116 121
 # pp(d('109','122')) # 109, 122 돈, 601 614 시간, 116 121
-
-
 # {'distance': {'min_value': 3300,
 #               'route': [(['101', '102', '103', '104', '105', '106', '107'], '1'),
 #                         (['107', '106', '105'], '1')],
