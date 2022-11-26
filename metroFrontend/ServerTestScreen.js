@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, FlatList, TouchableOpacity, SafeAreaView } from 'react-native';
 
 import axios from 'axios';
 
-// const API = axios.create({
-//     baseURL: 'http://127.0.0.1:8000/api/Station?format=api',
-//     headers: {
-//         'Content-Type' : 'application/json',
-//     },
-// });
+// 3
+const API = axios.create({
+    baseURL: 'http://127.0.0.1:8000/api/',
+    headers: {
+        'Content-Type' : 'application/json',
+    },
+});
 
 
 const ServerTestScreen = () => {
@@ -31,70 +32,106 @@ const ServerTestScreen = () => {
     const [error, setError] = useState('');
     const [station, setStation] = useState([])
 
-    const getData = async () => {
+    const getStation = async () => {
         try {
             setError(null);
             setLoading(true);
 
-            //1
-            const response = await fetch('http://127.0.0.1:8000/api/Station/?format=api');
-            const json = await response.json();
-            setStation(json.Station)
+            //1 network requset failed
+            // const response = await fetch('http://127.0.0.1:8000/api/Station/?format=api');
+            // const json = await response.json();
+            // setStation(json)
 
-            //2
+            //2 network requset failed
             // fetch('http://127.0.0.1:8000/api/Station?format=api')
             //     .then((response) => response.json())
-            //     .then((response) => {
-            //         <setInfo id={response.data[now]['id']}
-            //     linNum={response.data[now]['lineNumber']}
-            //     name={response.data[now]['stationName']}
-            //     staNum={response.data[now]['stationNum']} />
-            //     })
+            //     .then((json) => {setStation(json)})
+            //     .catch((error) => {
+            //         console.error(error);
+            //     });
 
-            //3
+            //3 ㅁ?ㄹ 3번째줄
             // await API.get(
-            //     // `/notes/${noteId}`
+            //     `Station/format/${}`
             // )
             // .then(function (response) {
-                
-            //     <setInfo id={response.data[now]['id']}
-            //     linNum={response.data[now]['lineNumber']}
-            //     name={response.data[now]['stationName']}
-            //     staNum={response.data[now]['stationNum']} />
-                // for(let i = 0; i < response.data.result.keywords.length; i++){
-                //     _keyword.push(response.data.result.keywords[i]['keyword']);
-                // }
-                // setKeywords(keywords.concat(_keyword));
-            //})
+
+            // })
             // .catch(function (error) {
             //     console.log(error.response);
             // })
 
-        // 4
-        // const data = await axios.get('http://127.0.0.1:8000/api/Station/?format=api')
-        // method:'GET',
-        // setStation(data.data[now].id)
+            // 4 이게 그나마...
+            // axios.request({
+            //     method:'GET',
+            //     url: 'http://127.0.0.1:8000/api/Station/?format=json',
 
-        //5
-        // const requset = new Request('http://127.0.0.1:8000/api/Station/?format=api', {
-        //     method: 'GET',
+            //     headers: {'Content-Type' : 'application/json'},
 
-        // })
-        // fetch(requset)
-        // .then((response) => response)
-        //tq
+            // }).then((response) => response.json())
+            // .then((json) => { 
+            //     setStation(json)
+            // }).catch(function (error) {
+            //     console.log(error.response);
+            // })
+
+            //5
+            // const requset = new Request('http://127.0.0.1:8000/api/Station/?format=api', {
+            //     method: 'GET',
+
+            // })
+            // fetch(requset)
+            // .then((response) => response)
+            //tq
+
+            //6 4랑 마찬가지
+            // axios.get(`http://127.0.0.1:8000/api/Station/get`, {
+            //     headers: {
+            //         'Content-Type' : 'application/json',
+            //     },})
+            //     .then(response => {setStation(response)})
 
 
-        } catch(e) {
-            setError(e);
-            console.error(error);
-        } finally {
-            setLoading(false);
+
+            //post
+
+            //1
+            // axios({
+            //     method: 'POST',
+            //     url: 'http://127.0.0.1:8000/api/',
+            //     headers: {
+            //         'Accept': 'application/json',
+            //         'Content-Type': 'application/json;charset=UTF-8'
+            //     },
+            //     data:{
+            //         id: 'test'
+            //     }
+            // });
+
+            //2
+            const data = {
+                id: 'test'
+            }
+
+            API.post(data)
+            .then(function(response) {
+                alert('완료!!!!');
+            })
+            .catch(function (error) {
+                console.log(error.response);
+            });
+
+
+            } catch(e) {
+                setError(e);
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
         }
-    }
 
-    useEffect(() => {
-        getData();
+    useState(() => {
+        getStation();
         }, []);
 
     const [now, setNow] = useState(-1);
@@ -132,13 +169,17 @@ const ServerTestScreen = () => {
         }
             
         {loading ? <ActivityIndicator/> : (
+            <SafeAreaView style={{ flex: 1, padding: 24, fontSize:14 }}>
+                <Text>{station.stationName}</Text>
+            
         <FlatList
             data={station}
-            keyExtractor={({ id }, index) => id}
+            keyExtractor={(item) => String(item.id)}
             renderItem={({ item }) => (
             <Text>{item.stationName}, {item.lineNumber}</Text>
             )}
         />
+        </SafeAreaView>
         ) }
                 
         </View>
