@@ -14,7 +14,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import ServerTestScreen from './ServerTestScreen';
 
-
 const Tab = createBottomTabNavigator();
 
 export default function App() {

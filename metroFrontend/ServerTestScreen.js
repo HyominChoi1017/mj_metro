@@ -3,43 +3,33 @@ import { StyleSheet, Text, View, ActivityIndicator, FlatList, TouchableOpacity }
 
 import axios from 'axios';
 
-const API = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/Station',
-    headers: {
-        'Content-Type' : 'application/json',
-    },
-});
+// const API = axios.create({
+//     baseURL: 'http://127.0.0.1:8000/api/Station?format=api',
+//     headers: {
+//         'Content-Type' : 'application/json',
+//     },
+// });
 
 
 const ServerTestScreen = () => {
 
-    // fetch('127.0.0.1:8000/api/Station/', {
+    // fetch('http://127.0.0.1:8000/api/Station/?format=api', {
     //     method: 'POST',
     //     headers: {
     //         'Content-Type' : 'application/json',
     //     },
-    // }
+    // })
 
+    // const st = {
+    //     id: '',
+    //     lineNumber : '',
+    //     stationName: '',
+    //     stationNum: '',
+    // }
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const [station, setStation] = useState(
-        {
-            id: '',
-            lineNumber : '',
-            stationName: '',
-            stationNum: '',
-        }
-    )
-
-    const setInfo = props => {
-        setStation({
-            id: props.id,
-            lineNumber : props.lineNum,
-            stationName: props.name,
-            stationNum: props.staNum,
-        })
-    }
+    const [station, setStation] = useState([])
 
     const getData = async () => {
         try {
@@ -47,35 +37,53 @@ const ServerTestScreen = () => {
             setLoading(true);
 
             //1
-            // const response = await fetch(
-            //     'http://127.0.0.1:8000/api/Station/'
-            // );
-            // const json = await response.json();
-            // setData(json.data);
+            const response = await fetch('http://127.0.0.1:8000/api/Station/?format=api');
+            const json = await response.json();
+            setStation(json.Station)
 
             //2
-            // fetch('http://127.0.0.1:8000/api/Station')
-            //     .then((res) => res.json())
-            //     .then((res) => setData(res))
+            // fetch('http://127.0.0.1:8000/api/Station?format=api')
+            //     .then((response) => response.json())
+            //     .then((response) => {
+            //         <setInfo id={response.data[now]['id']}
+            //     linNum={response.data[now]['lineNumber']}
+            //     name={response.data[now]['stationName']}
+            //     staNum={response.data[now]['stationNum']} />
+            //     })
 
             //3
-            await API.get(
-                // `/notes/${noteId}`
-            )
-            .then(function (response) {
+            // await API.get(
+            //     // `/notes/${noteId}`
+            // )
+            // .then(function (response) {
                 
-                <setInfo id={response.data[now]['id']}
-                linNum={response.data[now]['lineNumber']}
-                name={response.data[now]['stationName']}
-                staNum={response.data[now]['stationNum']} />
+            //     <setInfo id={response.data[now]['id']}
+            //     linNum={response.data[now]['lineNumber']}
+            //     name={response.data[now]['stationName']}
+            //     staNum={response.data[now]['stationNum']} />
                 // for(let i = 0; i < response.data.result.keywords.length; i++){
                 //     _keyword.push(response.data.result.keywords[i]['keyword']);
                 // }
                 // setKeywords(keywords.concat(_keyword));
-            })
-        .catch(function (error) {
-            console.log(error.response);
-        })
+            //})
+            // .catch(function (error) {
+            //     console.log(error.response);
+            // })
+
+        // 4
+        // const data = await axios.get('http://127.0.0.1:8000/api/Station/?format=api')
+        // method:'GET',
+        // setStation(data.data[now].id)
+
+        //5
+        // const requset = new Request('http://127.0.0.1:8000/api/Station/?format=api', {
+        //     method: 'GET',
+
+        // })
+        // fetch(requset)
+        // .then((response) => response)
+        //tq
+
 
         } catch(e) {
             setError(e);
@@ -83,11 +91,11 @@ const ServerTestScreen = () => {
         } finally {
             setLoading(false);
         }
+    }
 
-        useEffect(() => {
+    useEffect(() => {
         getData();
         }, []);
-    }
 
     const [now, setNow] = useState(-1);
 
@@ -119,17 +127,19 @@ const ServerTestScreen = () => {
             <MyButton num='2' />
             <MyButton num='3' />
             <Text>{now}</Text>
-            <Text>{station.stationName}</Text> 
+            {loading ? <Text>True</Text> : 
+            <Text>false</Text>
+        }
             
-            {loading ? <ActivityIndicator/> : (
-                <Text>{station.stationName}</Text> 
-                /* <FlatList>
-                    data={station}
-                    renderItem={({ item }) => (
-                    <Text>{item.stationName}, {item.lineNumber}</Text>
-                    )}
-                </FlatList> */
-            ) }
+        {loading ? <ActivityIndicator/> : (
+        <FlatList
+            data={station}
+            keyExtractor={({ id }, index) => id}
+            renderItem={({ item }) => (
+            <Text>{item.stationName}, {item.lineNumber}</Text>
+            )}
+        />
+        ) }
                 
         </View>
     )
