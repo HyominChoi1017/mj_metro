@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, FlatList } from 'react-native';
 
-import Home from './Home';
-import FindingWay from './FindingWay';
+import Home from './src/Home';
+import FindingWay from './src/FindingWay';
 
-import ReportScreen from './ReportScreen';
-import OptionScreen from './OptionScreen';
-import MyPageScreen from './MyPageScreen';
+import ReportScreen from './src/ReportScreen';
+import OptionScreen from './src/OptionScreen';
+import MyPageScreen from './src/MyPageScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
-import ServerTestScreen from './ServerTestScreen';
+import ServerTestScreen from './src/ServerTestScreen';
 
 const Tab = createBottomTabNavigator();
 

@@ -4,8 +4,8 @@ import { StatusBar } from 'expo-status-bar';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 import { Image } from 'react-native';
-import bubbleRight from './assets/bubbleRight.png';
-import bubbleLeft from './assets/bubbleLeft.png';
+import bubbleRight from '../assets/bubbleRight.png';
+import bubbleLeft from '../assets/bubbleLeft.png';
 
 export default function Home() {
 
