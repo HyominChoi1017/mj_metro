@@ -1,12 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, FlatList } from 'react-native';
+import * as React from 'react';
+// import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-const MyPageScreen = () => {
+
+import LogIn from './LogInScreen';
+import SignUp from './SignUpScreen';
+
+const Stack = createStackNavigator();
+function MyPageScreen() {
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>test5</Text>
-        </View>
-    )
+
+        <Stack.Navigator initialRouteName="MAIN">
+            <Stack.Screen name="LOGIN" component={LogIn}
+                options={{
+                    // title: '로그인'
+                }} />
+            <Stack.Screen name="SIGNUP" component={SignUp}
+                options={{
+                    // title: '회원가입'
+                }} />
+        </Stack.Navigator>
+    );
 }
 
 export default MyPageScreen;
