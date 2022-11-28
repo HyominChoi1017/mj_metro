@@ -62,18 +62,18 @@ const ServerTestScreen = () => {
             // })
 
             // 4 이게 그나마...
-            // axios.request({
-            //     method:'GET',
-            //     url: 'http://127.0.0.1:8000/api/Station/?format=json',
+            axios.request({
+                method:'GET',
+                url: 'http://127.0.0.1:8000/api/Station/',
 
-            //     headers: {'Content-Type' : 'application/json'},
+                headers: {'Content-Type' : 'application/json'},
 
-            // }).then((response) => response.json())
-            // .then((json) => { 
-            //     setStation(json)
-            // }).catch(function (error) {
-            //     console.log(error.response);
-            // })
+            }).then((response) => response.json())
+            .then((json) => { 
+                setStation(json)
+            }).catch(function (error) {
+                console.log(error.response);
+            })
 
             //5
             // const requset = new Request('http://127.0.0.1:8000/api/Station/?format=api', {
