@@ -37,60 +37,50 @@ const ServerTestScreen = () => {
             setError(null);
             setLoading(true);
 
-            //1 network requset failed
-            // const response = await fetch('http://127.0.0.1:8000/api/Station/?format=api');
-            // const json = await response.json();
-            // setStation(json)
-
-            //2 network requset failed
-            // fetch('http://127.0.0.1:8000/api/Station?format=api')
-            //     .then((response) => response.json())
-            //     .then((json) => {setStation(json)})
-            //     .catch((error) => {
-            //         console.error(error);
-            //     });
-
-            //3 ㅁ?ㄹ 3번째줄
-            // await API.get(
-            //     `Station/format/${}`
-            // )
-            // .then(function (response) {
-
-            // })
-            // .catch(function (error) {
-            //     console.log(error.response);
-            // })
-
             // 4 이게 그나마...
-            // axios.request({
-            //     method:'GET',
-            //     url: 'http://127.0.0.1:8000/api/Station/?format=json',
-
+            // axios.get('https://e054-118-34-138-189.jp.ngrok.io/api/Station/', {
             //     headers: {'Content-Type' : 'application/json'},
-
-            // }).then((response) => response.json())
+            // }).then((response) => 
+            // console.log(JSON.stringify(response)) //이거
+            // )
             // .then((json) => { 
+            //     alert('1')
             //     setStation(json)
             // }).catch(function (error) {
+            //     alert('2')
+            //     console.log(error.response);
             //     console.log(error.response);
             // })
 
-            //5
-            // const requset = new Request('http://127.0.0.1:8000/api/Station/?format=api', {
-            //     method: 'GET',
-
-            // })
-            // fetch(requset)
-            // .then((response) => response)
-            //tq
-
-            //6 4랑 마찬가지
-            // axios.get(`http://127.0.0.1:8000/api/Station/get`, {
-            //     headers: {
-            //         'Content-Type' : 'application/json',
-            //     },})
-            //     .then(response => {setStation(response)})
-
+            ///////////////
+            axios.post("https://72d6-2001-e60-9157-6a08-11b5-2f71-ccf5-e2c4.jp.ngrok.io/api/Station/", {
+                'Username': 'test1',
+                'Password': '1111',
+                'Reported': 1
+            })
+            .then((response) => {
+                    alert('실행')
+                    console.log(JSON.stringify(response))
+            })
+            .catch(function (error) {
+                alert('에러')
+                // console.log(error.toJSON());
+                if (error.response) {
+                    // The client was given an error response (5xx, 4xx)
+                    alert('에러1')
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The client never received a response, and the request was never left
+                    alert('에러2');
+                    console.log(error.request);
+                } else {
+                    // Anything else
+                    alert('에러3')
+                    console.log('Error', error.message);
+                }
+            });        
 
 
             //post
@@ -98,7 +88,7 @@ const ServerTestScreen = () => {
             //1
             // axios({
             //     method: 'POST',
-            //     url: 'http://127.0.0.1:8000/api/',
+            //     url: 'https://72d6-2001-e60-9157-6a08-11b5-2f71-ccf5-e2c4.jp.ngrok.io',
             //     headers: {
             //         'Accept': 'application/json',
             //         'Content-Type': 'application/json;charset=UTF-8'
@@ -109,17 +99,17 @@ const ServerTestScreen = () => {
             // });
 
             //2
-            const data = {
-                id: 'test'
-            }
+            // const data = {
+            //     id: 'test'
+            // }
 
-            API.post(data)
-            .then(function(response) {
-                alert('완료!!!!');
-            })
-            .catch(function (error) {
-                console.log(error.response);
-            });
+            // API.post(data)
+            // .then(function(response) {
+            //     alert('완료!!!!');
+            // })
+            // .catch(function (error) {
+            //     console.log(error.response);
+            // });
 
 
             } catch(e) {
@@ -130,7 +120,7 @@ const ServerTestScreen = () => {
             }
         }
 
-    useState(() => {
+    useEffect(() => {
         getStation();
         }, []);
 
@@ -170,15 +160,9 @@ const ServerTestScreen = () => {
             
         {loading ? <ActivityIndicator/> : (
             <SafeAreaView style={{ flex: 1, padding: 24, fontSize:14 }}>
-                <Text>{station.stationName}</Text>
+                <Text>{station}</Text>
             
-        <FlatList
-            data={station}
-            keyExtractor={(item) => String(item.id)}
-            renderItem={({ item }) => (
-            <Text>{item.stationName}, {item.lineNumber}</Text>
-            )}
-        />
+    
         </SafeAreaView>
         ) }
                 
