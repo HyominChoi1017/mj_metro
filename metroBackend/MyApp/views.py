@@ -147,7 +147,7 @@ def UserLogin(request):
 
 
 @api_view()
-def returnRoute(request):
+def Route(request):
     s = request.start
     e = request.end
     arg = request.args

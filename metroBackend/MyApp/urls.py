@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/Schedule/<int:userid>/', UserScheduleAPI.as_view()),
     path('api/Weather/<int:lati>/<int:long>/', getWeatherData),
     path('login/', UserLogin),
-    path('api/SubwayRoute/', returnRoute),
+    path('api/Route/', Route),
+    
 
 ]
