@@ -38,10 +38,15 @@ class UserScheduleSerializer(serializers.ModelSerializer):
 
 class UserStationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Schedule
+        model = FavStation
         fields = '__all__'
 
 class UserRouteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Schedule
+        model = FavRoute
+        fields = '__all__'
+
+class SingleStationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Station
         fields = '__all__'
