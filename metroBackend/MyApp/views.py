@@ -148,8 +148,13 @@ def UserLogin(request):
 
 @api_view()
 def Route(request):
-    s = request.start
-    e = request.end
-    arg = request.args
+    s = request.data.start
+    e = request.data.end
+    arg = request.data.args
+
     r_val = d(s, e, arg)
     return Response(r_val)
+
+@api_view()
+def Population(request, stationName):
+    name = stationName

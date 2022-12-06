@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/Weather/<int:lati>/<int:long>/', getWeatherData),
     path('login/', UserLogin),
     path('api/Route/', Route),
+    path('api/Population/<str:stationName>')
     
 
 ]
