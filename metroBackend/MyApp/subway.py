@@ -145,7 +145,7 @@ for i in station_lineNumber_dict.keys():#i는 현재 호선
                 break
     station_lineNumber_dict[i] = result
 
-print(station_lineNumber_dict)
+# pp(station_lineNumber_dict)
 
 
 # 만약 1개짜리가 있다면 한개는 처음 한개는 마지막 두고
@@ -179,27 +179,36 @@ for i in timeTable: # 호선 딕셔너리 시작점에 있는 역에 넣을 시�
         if i[j]=='':
             break
         if j%2 == 1: # 시간
-            temp_time += int(i[j])*60*60 #초로 바꾸기
+            temp_time = int(i[j])*60*60 #초로 바꾸기
         else: #분
             for k in range(int(len(i[j]) / 2)):
                 if temp_count == 0:
                     front.append(int(i[j][k*2:k*2+2])*60 + temp_time)
-                    temp_count = 1
+                    # temp_count = 1
                 else:
                     back.append(int(i[j][k*2:k*2+2])*60 + temp_time)
-                    temp_count = 0
+                    # temp_count = 0
+            if temp_count == 0:
+                temp_count = 1
+            else:
+                temp_count = 0
 
     station_timeTable_dict[i[0]].update({'front':front})
     station_timeTable_dict[i[0]].update({'back':back})
-    
+    # ['1', '05', '3547', '05', '36434956', '06', '02122231415056', '06', '0310152226323643505457', 
+    # '07', '00060911172024303644495459', '07', '00061013202427303337414447515458', 
+    # '08', '040914161923262933363942444750535659', '08', '0105091316202327303337404346495357', 
+    # '09', '030609121416182123262831333842464851545659', '09', '000306101417202427303337414548515558',
+    # '10', '0307121417232935414448515459', '10', '010408141720263340465357', '11', '010409131924313742485459'
+    # '23', '000918253036414957', '23', '03122536435059', '00', '041120304155', '00', '1020274355']
 # print(station_timeTable_dict)
 
 # print(station_timeTable_dict['9'])
 # print(station_lineNumber_dict)
 for lineNum, linelist in station_lineNumber_dict.items():#직접 맨 처음 역에 넣기
     station_class_dict[linelist[0]].s_timetable.update({lineNum:station_timeTable_dict[lineNum]})
-for lineNum, linelist in station_lineNumber_dict.items():
-    print(station_class_dict[linelist[0]].s_timetable.keys())
+# for lineNum, linelist in station_lineNumber_dict.items():
+#     print(station_class_dict[linelist[0]].s_timetable.keys())
 
 # print(station_class_dict['107'].s_timetable['3'])
 
@@ -488,7 +497,7 @@ def d(start, end, *args):
     return result
 
 # d('101','103','105')
-# pp(d('101','105','107'))
+# pp(d('116','606','614','621'))
 # pp(d('601','614')) # 109, 122 돈, 601 614 시간, 116 121
 # pp(d('109','122')) # 109, 122 돈, 601 614 시간, 116 121
 # {'distance': {'min_value': 3300,
