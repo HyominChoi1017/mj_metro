@@ -109,7 +109,7 @@ class SingleStationDataAPI(APIView):
 class UserStationAPI(APIView):
     @csrf_exempt
     def get(self, request, userid):
-        queryset = FavStation.objects.all().filter(user__exact=userid)
+        queryset = FavStation.objects.all().filter(favstationId__exact=userid)
         print(queryset.values)
         serializer = UserStationSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -126,7 +126,7 @@ class UserStationAPI(APIView):
 class UserRouteAPI(APIView):
     @csrf_exempt
     def get(self, request, userid):
-        queryset = FavRoute.objects.all().filter(user__exact=userid)
+        queryset = FavRoute.objects.all().filter(favRouteId__exact=userid)
         print(queryset.values)
         serializer = UserRouteSerializer(queryset, many=True)
         return Response(serializer.data)
