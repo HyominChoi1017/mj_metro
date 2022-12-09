@@ -25,6 +25,6 @@ urlpatterns = [
     path('api/Route/<str:s>/<str:e>/<str:arg>', RouteAPI.as_view()),
     path('api/UserStation/<int:userid>/', UserStationAPI.as_view()),
     path('api/UserRoute/<int:userid>', UserRouteAPI.as_view()),
+    path('api/Population/<str:sname>', PopulationAPI.as_view()),
     
-
 ]

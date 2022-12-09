@@ -11,6 +11,10 @@ from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from .realtimeWeather import *
 from .subway import d
+import datetime
+import os
+from .data import getNewDf
+from .model import predictDataFrame
 import ast
 
 # Test View 
@@ -154,6 +158,42 @@ class WeatherAPI(APIView):
         # return Response(serializer.data)
         return Response(wdata)
  
+class PopulationAPI(APIView):
+    def get(self, request, sname):
+        dat = getNewDf(sname)
+        fcst = predictDataFrame(dat)
+
+        tdy = datetime.date.today()
+        year = str(tdy.year)
+        month = str(tdy.month)
+        hour = str(datetime.datetime.now().hour)
+
+        yhats = []
+        ycurr = 0
+        for index, d in fcst.iterrows():
+            if year in str(d['ds']) and month in str(d['ds']) and hour in str(d['ds']):
+                ycurr = d['yhat']
+                yhats.append(d['yhat'])
+            elif year in str(d['ds']) and month in str(d['ds']):
+                yhats.append(d['yhat'])
+
+        y = (ycurr - min(yhats)) / (max(yhats)-min(yhats))
+        pop = ""
+        
+         
+
+        if y < 0.3: 
+            pop = "여유"
+        elif 0.3 <= y < 0.6:
+            pop = "보통"
+        elif 0.6 <= y < 0.8:
+            pop = "혼잡"  
+        else:
+            pop = "매우 혼잡"
+        resp = {
+            'density': pop
+        }
+        return Response(resp)
 
 
 @csrf_exempt
