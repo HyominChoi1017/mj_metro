@@ -11,6 +11,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from .realtimeWeather import *
 from .subway import d
+import json
 
 # Test View 
 class UserDataAPI(APIView):
@@ -173,10 +174,13 @@ def UserLogin(request):
 
 
 @api_view()
-def Route(request):
-    s = request.data.start
-    e = request.data.end
-    arg = request.data.args
+def Route(request, query):
+
+    query_data = json.loads(query)
+
+    s = query_data['s']
+    e = query_data['e']
+    arg = query_data['args']
 
     r_val = d(s, e, arg)
     return Response(r_val)

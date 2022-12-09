@@ -3,7 +3,7 @@
 openweathermap.org
 api_key = f54b13c3c6ecf6d1d51c6be402b095dc
 
-https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
+https://pro.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
 '''
 
 import requests
