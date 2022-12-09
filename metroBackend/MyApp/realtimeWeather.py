@@ -1,14 +1,16 @@
 
 '''
 openweathermap.org
-api_key = f54b13c3c6ecf6d1d51c6be402b095dc
+api_key = 11b3531bb49f2d4e91421d7ead3748ba
 
 https://pro.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
 '''
 
 import requests
+import json 
+import math
 
-API_KEY = "11b3531bb49f2d4e91421d7ead3748ba"
+API_KEY = "f54b13c3c6ecf6d1d51c6be402b095dc"
 
 # response = requests.get('https://google.com')
 # print(response)
@@ -19,9 +21,19 @@ def getWeatherData(lat, lon):
     print(API_KEY)
     lat = float(lat)
     lon = float(lon)
-    response = requests.get('https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_KEY}')
-    print(response.json())
-    return response.json()
+    print(lat, lon)
+    response = requests.get('https://pro.openweathermap.org/data/2.5/weather?lat={}&lon={}&APPID={}'.format(lat, lon, API_KEY)).json()
+    print(response)
+    weather = response['weather'][0]['description']
+    temperature = round((response['main']['temp'] -273.15), 1)
+
+    data = {
+        'weather': weather,
+        'temperature' : temperature
+    }
+    print(data)
+
+    return data
 
 
 # for test...

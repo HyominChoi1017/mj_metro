@@ -81,6 +81,12 @@ class Station(models.Model):
     def __str__(self):
         return self.stationName
 
+class Report(models.Model):
+    station = models.CharField(max_length=10)
+    content = models.CharField(max_length=300)
+
+    def __str__(self):
+        return self.content
 
 class User(models.Model):
 

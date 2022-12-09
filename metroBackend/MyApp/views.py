@@ -190,7 +190,8 @@ class RouteAPI(APIView):
     def get(self, request, s, e, arg): 
         print('---------{} {} ------'.format(s, e))
         arg = ast.literal_eval(arg)
-        
+       
+
         result = d(str(s), str(e), arg)
 
         return Response(result)
