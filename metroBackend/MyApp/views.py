@@ -11,7 +11,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from .realtimeWeather import *
 from .subway import d
-import json
+import ast
 
 # Test View 
 class UserDataAPI(APIView):
@@ -173,17 +173,27 @@ def UserLogin(request):
 
 
 
-@api_view()
-def Route(request, query):
+# @api_view()
+# def Route(request, query):
 
-    query_data = json.loads(query)
+#     query_data = json.loads(query)
+#     print(query_data)
+#     s = query_data['s']
+#     e = query_data['e']
+#     arg = query_data['args']
 
-    s = query_data['s']
-    e = query_data['e']
-    arg = query_data['args']
+#     r_val = d(s, e, arg)
+#     return Response(r_val)
 
-    r_val = d(s, e, arg)
-    return Response(r_val)
+class RouteAPI(APIView):
+    @csrf_exempt
+    def get(self, request, s, e, arg): 
+        print('---------{} {} ------'.format(s, e))
+        arg = ast.literal_eval(arg)
+        
+        result = d(str(s), str(e), arg)
+
+        return Response(result)
 
 @api_view()
 def Population(request, stationName):
