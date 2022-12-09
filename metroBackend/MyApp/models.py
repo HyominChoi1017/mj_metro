@@ -69,8 +69,8 @@ class Station(models.Model):
     address = models.CharField(max_length=100, default="")
 
     timeTable = models.JSONField(default={
-        "departureTime": [],
-        "arrivalTime": []
+        "front": [],
+        "back": []
     }) 
 
     def getWeather():

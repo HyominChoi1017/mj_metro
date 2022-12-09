@@ -5,7 +5,7 @@ import django
 django.setup()
 
 from MyApp.models import Station
-
+from MyApp.subway import *
 DIR_PATH = 'MyApp/dataset/stations_node.csv'
 def addStation():
     global DIR_PATH
@@ -21,7 +21,12 @@ def addStation():
             'stationName' : df['역이름'][ele],
             'lineNum' : df['호선'][ele],
             'transfer' : df['환승(없다면0)'][ele],
-            'address' : df['주소'][ele]
+            'address' : df['주소'][ele],
+            # station_class_dict[<str:역번호>].s_timetable[<str:호선>][<str:front인지 back인지>]
+            'timeTable': {
+                "front": station_class_dict[str(df['역번호'][ele])].s_timetable[str(df['호선'][ele])]['front'],
+                "back": station_class_dict[str(df['역번호'][ele])].s_timetable[str(df['호선'][ele])]['back']
+            },
         }
         data.append(dat)
     return data
@@ -37,7 +42,8 @@ for d in data:
         latitude=d['lat'],
         longitude=d['lon'],
         transfer=d['transfer'],
-        address=d['address']
+        address=d['address'],
+        timeTable=d['timeTable']
     )
     s.save()
 
