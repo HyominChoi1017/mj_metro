@@ -113,20 +113,46 @@ class UserStationAPI(APIView):
         print(queryset.values)
         serializer = UserStationSerializer(queryset, many=True)
         return Response(serializer.data)
- 
+    
+    @csrf_exempt
+    def post(self, request, userid):
+        queryset = JSONParser().parse(request)
+        serializer = UserStationSerializer(data=queryset)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201) #JsonResponse로 하는 방법도 존재
+        return Response(serializer.errors, status=400) #JsonResponse로 하는 방법도 존재
+
 class UserRouteAPI(APIView):
     @csrf_exempt
     def get(self, request, userid):
         queryset = FavRoute.objects.all().filter(user__exact=userid)
         print(queryset.values)
-        serializer = UserRouteAPI(queryset, many=True)
+        serializer = UserRouteSerializer(queryset, many=True)
         return Response(serializer.data)
+    @csrf_exempt
+    def post(self, request, userid):
+        queryset = JSONParser().parse(request)
+        serializer = UserRouteSerializer(data=queryset)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201) #JsonResponse로 하는 방법도 존재
+        return Response(serializer.errors, status=400) #JsonResponse로 하는 방법도 존재
 
-@csrf_exempt
-def getWeatherDataView(request, lat, lon):
-    res = getWeatherData(lat, lon)
-    return Response(res)
 
+class WeatherAPI(APIView):
+    def get(self, request, sname):
+        stationData = Station.objects.all().filter(stationName__exact=sname)
+        print(stationData[0].latitude, stationData[0].longitude)
+        lat = stationData[0].latitude
+        lon = stationData[0].longitude
+        wdata = getWeatherData(lat, lon)
+        print(wdata)
+        
+        # serializer = WeatherSerializer(wdata, many=False)
+        # return Response(serializer.data)
+        return Response(wdata)
+ 
 
 
 @csrf_exempt

@@ -50,3 +50,7 @@ class SingleStationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Station
         fields = '__all__'
+
+class WeatherSerializer(serializers.Serializer):
+    weather = serializers.JSONField()
+    

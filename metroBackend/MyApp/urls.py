@@ -20,10 +20,11 @@ urlpatterns = [
     path('api/Station/', StationDataAPI.as_view()),
     path('api/Station/<str:snum>', SingleStationDataAPI.as_view()),
     path('api/Schedule/<int:userid>/', UserScheduleAPI.as_view()),
-    path('api/Weather/<int:lati>/<int:long>/', getWeatherData),
+    path('api/Weather/<str:sname>/', WeatherAPI.as_view()),
     path('login/', UserLogin),
     path('api/Route/', Route),
-    # path('api/Population/<str:stationName>')
+    path('api/UserStation/<int:userid>/', UserStationAPI.as_view()),
+    path('api/UserRoute/<int:userid>', UserRouteAPI.as_view()),
     
 
 ]
