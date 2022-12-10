@@ -87,6 +87,8 @@ class S:
     def s_timetable(self, value):    # setter
         self.__s_timetable = value
 
+    
+    
     def sprint(self):
         print(self.s_num)
         print(self.s_name)
@@ -234,7 +236,7 @@ for lineNum, linelist in station_lineNumber_dict.items(): # 다른 역들 계산
     temp_list = linelist[0]
     for i in linelist[1:]:
         temp_table = copy.deepcopy(station_class_dict[temp_list].s_timetable[lineNum])
-        temp_time_plus = int(station_class_dict[temp_list].nearStation[i]['시간(초)']) + 60
+        temp_time_plus = int(station_class_dict[temp_list].nearStation[i]['시간(초)'])
         temp_count = 0
         for k, v in temp_table.items():
             if isFront:
@@ -319,7 +321,7 @@ def dijkstra(start, end): # distance+money+time dmt_num => str 문자임
             for new_destination, new_distanceitem in station_class_dict[current_destination].nearStation.items(): #111111111111111111111111111graph[current_destination]
                 new_distance = new_distanceitem[dmt]#22222222222222222222dmt_num
                 if dmt == '시간(초)':
-                    distance = current_distance + int(new_distance) + 60  # 해당 노드를 거쳐 갈 때 거리 , 전철 정차 시간 1분
+                    distance = current_distance + int(new_distance)  # 해당 노드를 거쳐 갈 때 거리 , 전철 정차 시간 1분
                 else:
                     distance = current_distance + int(new_distance)  # 해당 노드를 거쳐 갈 때 거리 , 비용과 거리는 정차 시간 관여X
                 if distance < distances[new_destination]['min_value']:  # 알고 있는 거리 보다 작으면 갱신
@@ -349,7 +351,7 @@ def evaluate(args):  #검증
             i2 = i
             for dmt, var in dmt_num.items():
                 if dmt == '시간(초)':
-                    var[0]+=int(station_class_dict[i1].nearStation[i2][dmt])+60
+                    var[0]+=int(station_class_dict[i1].nearStation[i2][dmt])
                 else:
                     var[0]+=int(station_class_dict[i1].nearStation[i2][dmt])
         elif i1!=0 and i2!=0:
@@ -357,7 +359,7 @@ def evaluate(args):  #검증
             i2 = i
             for dmt, var in dmt_num.items():
                 if dmt == '시간(초)':
-                    var[0]+=int(station_class_dict[i1].nearStation[i2][dmt])+60
+                    var[0]+=int(station_class_dict[i1].nearStation[i2][dmt])
                 else:
                     var[0]+=int(station_class_dict[i1].nearStation[i2][dmt])
     return {'money':money[0],'distance':distance[0],'time':time[0]}
