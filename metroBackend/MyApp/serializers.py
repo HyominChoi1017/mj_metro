@@ -34,7 +34,8 @@ class StationSerializer(serializers.ModelSerializer):
 class UserScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Schedule
-        fields = '__all__'
+        fields = '__all__' # 전부 보내는데 scheduleName, time만 사용.
+        
 
 class UserStationSerializer(serializers.ModelSerializer):
     class Meta:

@@ -87,10 +87,18 @@ class ScheduleDataAPI(APIView):
 class UserScheduleAPI(APIView):
     @csrf_exempt
     def get(self, request, userid):
-        queryset = Schedule.objects.all().filter(user__exact=userid)
+        queryset = Schedule.objects.all().filter(user__exact=userid)[-1]
         print(queryset.values)
-        serializer = UserScheduleSerializer(queryset, many=True)
+        serializer = UserScheduleSerializer(queryset, many=False)
         return Response(serializer.data)  
+    @csrf_exempt
+    def post(self, request, userid):
+        queryset = JSONParser().parse(request)
+        serializer = UserScheduleSerializer(data=queryset)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=201)
+        return Response(serializer.errors, status=400)
 
 # Actual View 
 class StationDataAPI(APIView):

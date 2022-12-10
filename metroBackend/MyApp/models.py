@@ -7,6 +7,7 @@ class Schedule(models.Model):
         "User",   
         on_delete=models.CASCADE
     )
+    # 말이 scheduleName이지 근처에 있는 역 이름을 저장한다.
     scheduleName = models.CharField(help_text = "Name of the Schedule", max_length=30, default="My Schedule")
     routeContent = models.JSONField(default={
         "start": "",
@@ -23,6 +24,8 @@ class Schedule(models.Model):
         ("son", "일요일"),
     ), max_length=3, default="") # 몇요일에 있는 일정인지
     # time은 파이썬의 time객체를 전달한다. 그러나 편의를 위해 text로 변환해서 모델에 저장..
+    
+    # 시간데이터를 저장한다.
     time = models.CharField(default="00:00:00", max_length=10) # 몇시에 있는 일정인지.
     count = models.SmallIntegerField(default=30) # 기본값으로 열차 출발 30분 전에 알림을 줌
 
